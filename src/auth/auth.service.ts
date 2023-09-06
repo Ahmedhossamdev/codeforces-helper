@@ -14,7 +14,6 @@ export class AuthService {
     hashData(data: string) {
         return bcrypt.hash(data, 10);
     }
-
     async createTokens(userId: number, email: string , name: string) {
         const [at , rt] = await  Promise.all([
             this.jwtService.signAsync({
@@ -48,8 +47,7 @@ export class AuthService {
         const hash = await this.hashData(rt);
         await this.prismaService.user.update({
             where:{
-                id:userId,
-
+                id: userId,
             },
             data:{
                 hashedRt:hash,
@@ -116,11 +114,39 @@ export class AuthService {
 
     }
 
-    logout() {
-
+   async logout(userId : number) {
+       await this.prismaService.user.updateMany({
+           where:{
+               id : userId,
+               hashedRt:{
+                   not: null,
+               }
+           },
+           data:{
+               hashedRt: null,
+           }
+       });
     }
 
-    refreshTokens() {
+    async refreshTokens(userId: number , rt:string) {
+        const user = await this.prismaService.user.findUnique({
+            where:{
+                id: userId,
+            }
+        })
+        if (!user || !user.hashedRt) {
+            throw new ForbiddenException("Access Denied");
+        }
+
+        const rtMatches = bcrypt.compare(rt , user.hashedRt);
+
+        if (!rtMatches){
+            throw new ForbiddenException('Access Denied');
+        }
+        const tokens = await this.createTokens(user.id , user.email , user.name);
+        await this.updateRtHash(user.id , tokens.refresh_token);
+        return tokens;
+
 
     }
 }

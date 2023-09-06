@@ -1,6 +1,6 @@
-import {Strategy} from "passport";
+
 import {PassportStrategy} from "@nestjs/passport";
-import {ExtractJwt} from "passport-jwt";
+import {ExtractJwt , Strategy} from "passport-jwt";
 import {Injectable} from "@nestjs/common";
 import {Request} from "express";
 
@@ -21,6 +21,5 @@ export class RtStrategy extends PassportStrategy(Strategy , 'jwt-refresh'){
             ...payload,
             refreshToken,
         }
-        // req.user = payload
     }
 }
