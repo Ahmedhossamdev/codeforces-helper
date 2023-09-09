@@ -73,7 +73,8 @@ export class AuthService {
         if (userExist) {
             if (userExist.email === dto.email) {
                 throw new ConflictException('User with this email already exists');
-            } else if (userExist.name === dto.name) {
+            }
+            else if (userExist.name === dto.name) {
                 throw new ConflictException('User with this name already exists');
             }
         }
@@ -88,6 +89,7 @@ export class AuthService {
                 password,
             }
         });
+
         const tokens = await this.createTokens(newUser.id , newUser.email , newUser.name);
         await this.updateRtHash(newUser.id , tokens.refresh_token);
         return tokens;
@@ -146,7 +148,5 @@ export class AuthService {
         const tokens = await this.createTokens(user.id , user.email , user.name);
         await this.updateRtHash(user.id , tokens.refresh_token);
         return tokens;
-
-
     }
 }

@@ -13,32 +13,24 @@ datasource db {
 // schema.prisma
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  name      String   @unique
-  lists     List[]
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  name      String    @unique
   password  String
   hashedRt  String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  problems  Problem[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
   @@map("users")
 }
 
-model List {
-  id       Int       @id @default(autoincrement())
-  name     String
-  userId   Int
-  user     User      @relation(fields: [userId], references: [id])
-  problems Problem[]
-}
-
 model Problem {
-  id         Int      @id @default(autoincrement())
-  name       String
-  text       String?
-  listId     Int
-  list       List     @relation(fields: [listId], references: [id])
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  name      String
+  text      String?
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  createdat DateTime @default(now())
+  updatedat DateTime @updatedAt
 }
