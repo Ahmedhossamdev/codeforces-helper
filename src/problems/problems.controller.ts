@@ -10,8 +10,13 @@ export class ProblemsController {
 
     // @Post('addproblem')
     // @HttpCode(HttpStatus.OK)
-    // addProblem(@Body() dto : AddProblemDto , @GetCurrentUserId() userId : number){
-    //     return this.problemsService.addProblem(dto , userId);
+    // async addProblem(@Body() dto : AddProblemDto , @GetCurrentUserId() userId : number){
+    //     const createdProblem = await this.problemsService.addProblem(dto , userId);
+    //
+    //     return {
+    //         message: 'Problem created successfully',
+    //         data: createdProblem,
+    //     };
     // }
 
     //@Get('getproblem')
