@@ -12,21 +12,16 @@ export class ProblemsService {
 
     }
 
-    async addProblem(dto: AddProblemDto, userId: number) {
-        const addProblem = await this.prismaService.problem.create({
-            data: {
-                userId,
-                name: dto.name,
-                text: dto.text,
-                tags: {
-                    connectOrCreate: dto.tags.map((tagName) => ({
-                        where: { name: tagName },
-                        create: { name: tagName },
-                    })),
-                },
-            },
-        });
-        return addProblem;
-    }
+    // async addProblem(dto: AddProblemDto, userId: number) {
+    //     const addProblem = await this.prismaService.problem.create({
+    //         data: {
+    //             userId,
+    //             name: dto.name,
+    //             text: dto.text,
+    //
+    //         },
+    //     });
+    //     return addProblem;
+    // }
 
 }

@@ -8,11 +8,11 @@ import {GetCurrentUserId} from "../common/decorators";
 export class ProblemsController {
     constructor(private readonly problemsService: ProblemsService) {}
 
-    @Post('addproblem')
-    @HttpCode(HttpStatus.OK)
-    addProblem(@Body() dto : AddProblemDto , @GetCurrentUserId() userId : number){
-        return this.problemsService.addProblem(dto , userId);
-    }
+    // @Post('addproblem')
+    // @HttpCode(HttpStatus.OK)
+    // addProblem(@Body() dto : AddProblemDto , @GetCurrentUserId() userId : number){
+    //     return this.problemsService.addProblem(dto , userId);
+    // }
 
     //@Get('getproblem')
 }
