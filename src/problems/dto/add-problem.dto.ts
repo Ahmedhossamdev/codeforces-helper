@@ -10,8 +10,11 @@ export class AddProblemDto{
 
     @IsString()
     @IsNotEmpty()
+    url: string
+    @IsString()
+    @IsNotEmpty()
     text: string
 
-    @IsArray()
-    tags: string[];
+      @IsArray()
+     tags: string[];
 }

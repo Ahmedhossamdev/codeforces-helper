@@ -15,29 +15,30 @@ model User {
   hashedRt  String?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  problems  Problem[]
+  Problem   Problem[]
 
   @@map("users")
 }
 
 model Problem {
-  id        Int      @id @default(autoincrement())
-  name      String
-  text      String
+  id        Int          @id @default(autoincrement())
   userId    Int
-  user      User     @relation(fields: [userId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  tags      Tag[]
+  user      User         @relation(fields: [userId], references: [id])
+  name      String
+  url       String
+  text      String
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  tags      ProblemTag[]
 }
 
 model Tag {
-  id       Int       @id @default(autoincrement())
-  name     String    @unique
-  problems Problem[]
+  name String @id
 }
 
-enum TagEnum {
-  DP
-  Math
+model ProblemTag {
+  id        Int     @id @default(autoincrement())
+  problemId Int
+  Problem   Problem @relation(fields: [problemId], references: [id])
+  tagName   String
 }
