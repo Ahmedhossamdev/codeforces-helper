@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import {AddProblemDto, ProblemResponseDto} from "./dto";
 import {PrismaService} from "../prisma/prisma.service";
-//import {TagEnum} from '@prisma/client';
+import {PrismaClient} from "@prisma/client";
+
 
 
 @Injectable()
@@ -16,6 +17,8 @@ export class ProblemsService {
 
     async addProblem(dto: AddProblemDto, userId: number) {
 
+
+             // math , dp
             const createdProblem = await this.prismaService.problem.create({
                 data: {
                     userId: userId,
@@ -26,32 +29,28 @@ export class ProblemsService {
                         create: dto.tags.map(tagName => ({ tagName })),
                     },
                 },
-                include: {
-                    tags: true,
-                },
             });
             return createdProblem;
     }
 
     async getProblemsByTags(tags: string[], userId: number) : Promise<ProblemResponseDto[]> {
-
-
-        console.log(tags);
-        const problems = await this.prismaService.problem.findMany({
-            where: {
-                userId: userId,
-                tags: {
-                    some: {
-                        tagName: {
-                            in: tags,
+            const problems = await this.prismaService.problem.findMany({
+                where: {
+                    userId: userId,
+                    tags: {
+                        some: {
+                            tagName: {
+                                in: tags,
+                            },
                         },
                     },
                 },
-            },
-            include: {
-                tags: true,
-            },
-        });
+                include: {
+                    tags: true,
+                },
+            });
+
+
         const response: ProblemResponseDto[] = problems.map((problem) => ({
             id: problem.id,
             name: problem.name,
@@ -62,10 +61,9 @@ export class ProblemsService {
             tags: problem.tags.map((tag) => tag.tagName),
         }));
 
+
+
         return response;
     }
-
-
-
 
 }

@@ -21,22 +21,18 @@ model User {
 }
 
 model Problem {
-  id        Int          @id @default(autoincrement())
+  id        Int           @id @default(autoincrement())
   userId    Int
-  user      User         @relation(fields: [userId], references: [id])
+  user      User          @relation(fields: [userId], references: [id])
   name      String
   url       String
   text      String
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
-  tags      ProblemTag[]
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  tags      Problem_Tag[]
 }
 
-model Tag {
-  name String @id
-}
-
-model ProblemTag {
+model Problem_Tag {
   id        Int     @id @default(autoincrement())
   problemId Int
   Problem   Problem @relation(fields: [problemId], references: [id])

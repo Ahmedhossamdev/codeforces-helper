@@ -1,4 +1,4 @@
-import {IsEmail, IsNotEmpty, IsString, MinLength} from "class-validator";
+import {IsAlpha, IsEmail, IsNotEmpty, IsString, MinLength} from "class-validator";
 
 
 export class AuthSignUpDto {
