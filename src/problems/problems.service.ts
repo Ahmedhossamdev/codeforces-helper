@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import {AddProblemDto, ProblemResponseDto} from "./dto";
 import {PrismaService} from "../prisma/prisma.service";
-import {PrismaClient} from "@prisma/client";
 
 
 
@@ -48,7 +47,7 @@ export class ProblemsService {
                 include: {
                     tags: true,
                 },
-            });
+             });
 
 
         const response: ProblemResponseDto[] = problems.map((problem) => ({
@@ -60,9 +59,6 @@ export class ProblemsService {
             updatedAt: problem.updatedAt,
             tags: problem.tags.map((tag) => tag.tagName),
         }));
-
-
-
         return response;
     }
 

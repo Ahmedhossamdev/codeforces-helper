@@ -8,16 +8,44 @@ datasource db {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  email     String    @unique
-  name      String    @unique
-  password  String
-  hashedRt  String?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  Problem   Problem[]
+  id             Int        @id @default(autoincrement())
+  email          String     @unique
+  name           String     @unique
+  password       String
+  hashedRt       String?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  photoUrl       String?
+  codeforcesLink String?
+  Problem        Problem[]
+  BlogPosts      BlogPost[]
+  Comment        Comment[]
 
   @@map("users")
+}
+
+model BlogPost {
+  id        Int       @id @default(autoincrement())
+  title     String
+  content   String
+  author    User      @relation(fields: [authorId], references: [id])
+  authorId  Int
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  comments  Comment[]
+  image     String?
+  status    String?
+  votes     Int
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  text      String
+  postId    Int
+  post      BlogPost @relation(fields: [postId], references: [id])
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  Int
+  createdAt DateTime @default(now())
 }
 
 model Problem {
@@ -30,6 +58,8 @@ model Problem {
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
   tags      Problem_Tag[]
+
+  @@index([userId])
 }
 
 model Problem_Tag {
@@ -37,4 +67,6 @@ model Problem_Tag {
   problemId Int
   Problem   Problem @relation(fields: [problemId], references: [id])
   tagName   String
+
+  @@index([problemId])
 }
