@@ -1,3 +1,16 @@
+
+
+
+## Looking for Contributors
+
+We are actively seeking contributors for both frontend and backend development. If you are passionate about building efficient and scalable applications and would like to contribute to our project, please feel free to reach out to us or submit a pull request. We welcome all levels of experience!
+email me: ahmedhossamdev1@gmail.com
+
+
+
+
+
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>
