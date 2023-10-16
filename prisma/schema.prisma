@@ -20,6 +20,7 @@ model User {
   Problem        Problem[]
   BlogPosts      BlogPost[]
   Comment        Comment[]
+  Vote           Vote[]
 
   @@map("users")
 }
@@ -35,7 +36,7 @@ model BlogPost {
   comments  Comment[]
   image     String?
   status    String?
-  votes     Int
+  votes     Vote[]
 }
 
 model Comment {
@@ -46,6 +47,16 @@ model Comment {
   author    User     @relation(fields: [authorId], references: [id])
   authorId  Int
   createdAt DateTime @default(now())
+}
+
+model Vote {
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int
+  blogPost   BlogPost @relation(fields: [blogPostId], references: [id])
+  blogPostId Int
+  voteValue  Int
+
+  @@unique([userId, blogPostId])
 }
 
 model Problem {
