@@ -31,28 +31,63 @@ export class BlogService {
 
 
     async getAllBlogs() {
-        const blogs = await this.prismaService.blogPost.findMany({});
+        const blogs = await this.prismaService.blogPost.findMany({
+            include: {
+                votes: {
+                    select: {
+                        voteValue: true,
+                    },
+                },
+            },
+        });
+
+        const transformedBlogs = blogs.map((blog) => {
+            const sum = blog.votes.reduce((accumulator, vote) => accumulator + vote.voteValue, 0);
+            return {
+                ...blog,
+                votes: sum,
+            };
+        });
+
         return {
             status: true,
             content: {
-                data: blogs
-            }
-        }
+                data: transformedBlogs,
+            },
+        };
     }
+
+
+
 
     async getBlog(blogId: number) {
         const blog = await this.prismaService.blogPost.findUnique({
             where: {
                 id: blogId,
-            }
+            },
+            include: {
+                votes: {
+                    select: {
+                        voteValue: true,
+                    },
+                },
+            },
         });
+
+        const sum = blog.votes.reduce((accumulator, vote) => accumulator + vote.voteValue, 0);
+        const transformedBlog = {
+            ...blog,
+            votes: sum,
+        };
+
         return {
             status: true,
             content: {
-                data: blog
-            }
-        }
+                data: transformedBlog,
+            },
+        };
     }
+
 
     async deleteBlog(blogId: number) {
         await this.prismaService.blogPost.delete({
@@ -118,7 +153,7 @@ export class BlogService {
                     blogPostId: blogId,
                     voteValue: voteValue,
                 },
-            });
+            }); 
 
             voteSum = await this.prismaService.vote.aggregate({
                 where: {
