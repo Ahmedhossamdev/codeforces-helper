@@ -1,52 +1,35 @@
-import {Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post} from '@nestjs/common';
-import {BlogService} from "./blog.service";
-import {AddBlogDto} from "./dto/add-blog.dto";
-import {GetCurrentUserId} from "../common/decorators";
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post } from '@nestjs/common';
+import { BlogService } from './blog.service';
+import { AddBlogDto } from './dto/add-blog.dto';
+import { GetCurrentUserId } from '../common/decorators';
+import { VoteDto } from './dto/vote-blog.dto';
 
 @Controller('blogs')
 export class BlogController {
-    constructor(private readonly blogService: BlogService) {
-    }
+  constructor(private readonly blogService: BlogService) {}
 
+  @Post()
+  async create(@Body() addBlogDto: AddBlogDto, @GetCurrentUserId() userId: number) {
+    return await this.blogService.create(addBlogDto, userId);
+  }
 
-    @Post('add')
-    @HttpCode(HttpStatus.OK)
-    async addBlog(@Body() dto: AddBlogDto, @GetCurrentUserId() userId: number) {
-        return await this.blogService.addBlog(dto, userId);
-    }
+  @Get()
+  async findAll() {
+    return await this.blogService.findAll();
+  }
 
-    @Get('')
-    @HttpCode(HttpStatus.OK)
-    async getAllBlogs() {
-        return await this.blogService.getAllBlogs();
-    }
+  @Get('/:id')
+  async findOne(@Param('id') blogId: string) {
+    return await this.blogService.findOne(+blogId);
+  }
 
-    @Get('/:id')
-    @HttpCode(HttpStatus.OK)
-    async getBlog(@Param('id') blogId: number) {
-        const parsedBlogId = Number(blogId);
-        return await this.blogService.getBlog(parsedBlogId);
-    }
+  @Delete('/:id')
+  async delete(@Param('id') blogId: string) {
+    return await this.blogService.delete(+blogId);
+  }
 
-    @Delete('/:id')
-    @HttpCode(HttpStatus.OK)
-    async deleteBlog(@Param('id') blogId: number) {
-        const parsedBlogId = Number(blogId);
-        return await this.blogService.deleteBlog(parsedBlogId);
-    }
-
-    @Post('/:id/vote/:value')
-    @HttpCode(HttpStatus.OK)
-    async vote(@Param('value') voteValue: number , @Param('id') blogId: number, @GetCurrentUserId() userId: number) {
-        const parsedBlogId = Number(blogId);
-        const parsedValueId = Number(voteValue);
-        return await this.blogService.vote(parsedBlogId, userId,parsedValueId);
-    }
-
-    // @Patch('/:id/vote')
-    // @HttpCode(HttpStatus.OK)
-    // async removeVote(@Param('id') blogId: number, @GetCurrentUserId() userId: number) {
-    //     const parsedBlogId = Number(blogId);
-    //     return await this.blogService.removeVote(parsedBlogId, userId);
-    // }
+  @Post('/:id/vote')
+  async vote(@Body() voteValue: VoteDto, @Param('id') blogId: string, @GetCurrentUserId() userId: number) {
+    return await this.blogService.vote(+blogId, userId, voteValue);
+  }
 }
