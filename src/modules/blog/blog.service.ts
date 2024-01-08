@@ -21,12 +21,7 @@ export class BlogService {
       },
     });
 
-    return {
-      status: true,
-      content: {
-        data: newBlog,
-      },
-    };
+    return { data: newBlog };
   }
 
   async findAll() {
@@ -56,22 +51,21 @@ export class BlogService {
       where: {
         id: blogId,
       },
-      // include: {
-      //   votes: {
-      //     select: {
-      //       userId: true,
-      //       blogId: true,
-      //       value: true,
-      //     },
-      //   },
-      // },
+      include: {
+        votes: {
+          select: {
+            value: true,
+          },
+        },
+      },
     });
 
     if (!blog) {
       throw new NotFoundException('Blog not found');
     }
+    const votes = blog.votes.reduce((accumulator, vote) => accumulator + vote.value, 0);
 
-    return { data: blog };
+    return { data: { ...blog, votes } };
   }
 
   async delete(blogId: number) {
@@ -108,7 +102,7 @@ export class BlogService {
   //     });
 
   //     let voteChange = 0;
-  
+
   //     // If the user has not voted before, the change is simply the vote value
   //     if (!existingVote || existingVote?.value === 0) {
   //       voteChange = vote.value;
@@ -116,7 +110,7 @@ export class BlogService {
   //     else if (vote.value === existingVote.value) {
   //       // If the user is submitting the same vote, neutralize the vote
   //       voteChange = -vote.value;
-  //     } 
+  //     }
   //     else {
   //       // If the user is changing their vote, the change is the absolute difference between the new vote and the existing vote
   //       voteChange = 2 * vote.value;
