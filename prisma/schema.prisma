@@ -31,7 +31,7 @@ model Blog {
   content String
 
   authorId   Int
-  totalVotes Int @default(0) // Add this field to store the total votes
+  totalVotes Int @default(0) 
 
   image  String?
   status String?
@@ -42,6 +42,8 @@ model Blog {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([authorId])
 }
 
 model Comment {
@@ -55,6 +57,9 @@ model Comment {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([blogId])
+  @@index([authorId])
 }
 
 model Vote {
@@ -65,6 +70,9 @@ model Vote {
   user User @relation(fields: [userId], references: [id])
   blog Blog @relation(fields: [blogId], references: [id], onDelete: Cascade)
 
+
+  @@index([userId])
+  @@index([blogId])
   @@unique([userId, blogId])
 }
 
