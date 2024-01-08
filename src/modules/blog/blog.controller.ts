@@ -7,8 +7,11 @@ import { VoteService } from '../votes/votes.service';
 
 @Controller('blogs')
 export class BlogController {
-  constructor(private readonly blogService: BlogService, private readonly voteService: VoteService) {}
-  
+  constructor(
+    private readonly blogService: BlogService,
+    private readonly voteService: VoteService,
+  ) {}
+
   @Post()
   async create(@Body() addBlogDto: AddBlogDto, @GetCurrentUserId() userId: number) {
     return await this.blogService.create(addBlogDto, userId);

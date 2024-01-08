@@ -30,8 +30,8 @@ model Blog {
   title   String
   content String
 
-  authorId   Int
-  totalVotes Int @default(0) 
+  authorId Int
+  // totalVotes Int @default(0) 
 
   image  String?
   status String?
@@ -70,10 +70,9 @@ model Vote {
   user User @relation(fields: [userId], references: [id])
   blog Blog @relation(fields: [blogId], references: [id], onDelete: Cascade)
 
-
+  @@unique([userId, blogId])
   @@index([userId])
   @@index([blogId])
-  @@unique([userId, blogId])
 }
 
 model Problem {
